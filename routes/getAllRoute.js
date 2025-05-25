@@ -2,6 +2,7 @@
 
 import express from 'express';
 import captureModel from '../models/captureModel.js';
+import { deleteController } from '../controllers/deleteController.js';
 
 const router = express.Router();
 
@@ -13,5 +14,8 @@ router.get('/all', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch images' });
   }
 });
+
+router.delete('/:id', deleteController);
+
 
 export default router;

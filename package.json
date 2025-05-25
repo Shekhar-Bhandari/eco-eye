@@ -2,8 +2,7 @@
   "name": "todo-mern-app",
   "version": "1.0.0",
   "description": "todo app",
-  "type":"module",
-
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,6 +13,7 @@
   "author": "techinfoyt",
   "license": "ISC",
   "dependencies": {
+    "@react-google-maps/api": "^2.20.6",
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "concurrently": "^8.2.2",
