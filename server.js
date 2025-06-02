@@ -3,7 +3,7 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import colors from "colors";
 import cors from "cors";
-import connectDB from "./config/db.js";  // add .js extension here
+import connectDB from "./config/db.js";  
 
 // env config
 dotenv.config();
@@ -11,7 +11,6 @@ dotenv.config();
 // DB CONNECTION
 connectDB();
 
-// rest object
 const app = express();
 
 // middlewares
@@ -21,7 +20,7 @@ app.use(morgan("dev"));
 
 // routes
 import userRoute from "./routes/userRoute.js";
-import { deleteRoute, uploadRoute } from "./routes/uploadRoute.js";
+import {  uploadRoute } from "./routes/uploadRoute.js";
 import router from "./routes/getAllRoute.js";
 
 app.use("/api/v1/user", userRoute);

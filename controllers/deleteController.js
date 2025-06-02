@@ -10,7 +10,7 @@ export const deleteController = async (req, res) => {
       });
     }
 
-    // Pass id directly to findByIdAndDelete
+//delete
     const deleted = await CapturedImage.findByIdAndDelete(id);
 
     if (!deleted) {

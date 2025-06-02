@@ -2,7 +2,7 @@ import JWT from "jsonwebtoken";
 
 const authMiddleware = async (req, res, next) => {
   try {
-    // get token Bearer <token>
+    // get token
     const authHeader = req.headers["authorization"];
     if (!authHeader) {
       return res.status(400).send({

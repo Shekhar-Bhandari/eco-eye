@@ -1,4 +1,3 @@
-// routes/getAllRoute.js (or whatever file name you’re using)
 
 import express from 'express';
 import captureModel from '../models/captureModel.js';

@@ -1,10 +1,15 @@
 import React, { useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 import axios from 'axios';
+import './HomePage.css';
+import { useNavigate } from 'react-router-dom';
+import camera from '../../images/camera.png'; // Replace with your own
 
 const HomePage = () => {
   const webcamRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(null);
+  const [showCamera, setShowCamera] = useState(false);
+  const navigate = useNavigate();
 
   const videoConstraints = {
     width: 1280,
@@ -21,7 +26,6 @@ const HomePage = () => {
   const sendImageToBackend = () => {
     if (!imageSrc) return alert("No image to send.");
 
-    // Get user location first
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const location = {
@@ -39,8 +43,8 @@ const HomePage = () => {
           );
 
           console.log("Image uploaded successfully:", response.data);
-          alert("Image sent to backend!");
-          setImageSrc(null); // Optionally clear the preview after sending
+          setImageSrc(null);
+          navigate('/admin');
         } catch (error) {
           console.error("Error uploading image:", error);
           alert("Failed to send image.");
@@ -54,31 +58,48 @@ const HomePage = () => {
   };
 
   return (
-    <div>
-      <Webcam
-        audio={false}
-        ref={webcamRef}
-        screenshotFormat="image/jpeg"
-        width={640}
-        height={480}
-        videoConstraints={videoConstraints}
-      />
+    <div className="page-container">
+      <header className="header">
+        <h1>Eco Eye</h1>
+        <p>Report Waste Instantly with Your Camera</p>
+      </header>
 
-      <div>
-        <button onClick={captureImage}>Capture</button>
-        <button onClick={sendImageToBackend}>Send</button>
-      </div>
+      <main className="home">
+        {!showCamera ? (
+          <div className="camera-button" onClick={() => setShowCamera(true)}>
+            <img className="cam" src={camera} alt="Open Camera" />
+            <p className="instruction-text">Click to open camera and report garbage issue</p>
+          </div>
+        ) : (
+          <div className="webcam">
+            <Webcam
+              audio={false}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              width={640}
+              height={480}
+              videoConstraints={videoConstraints}
+            />
 
-      {imageSrc && (
-        <div>
-          <h4>Preview:</h4>
-          <img
-            src={imageSrc}
-            alt="Captured"
-            style={{ width: '320px', marginTop: '10px' }}
-          />
-        </div>
-      )}
+            <div className="btn">
+              <button onClick={captureImage}>📸 Capture</button>
+              <button onClick={sendImageToBackend}>📤 Send</button>
+            </div>
+
+            {imageSrc && (
+              <div className="preview">
+                <h4>Preview:</h4>
+                <img src={imageSrc} alt="Captured" />
+              </div>
+            )}
+          </div>
+        )}
+      </main>
+
+      <footer className="footer">
+        <p>© 2025 Eco Eye. All rights reserved.</p>
+        <p>Contact: support@ecoeye.org</p>
+      </footer>
     </div>
   );
 };
