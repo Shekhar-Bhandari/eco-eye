@@ -10,7 +10,7 @@ const AdminPage = () => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const res = await axios.get('/api/v1/capture/all');
+        const res = await axios.get('https://eco-eye.onrender.com/api/v1/capture/all');
         setImages(res.data);
       } catch (error) {
         console.error('Failed to fetch images:', error);

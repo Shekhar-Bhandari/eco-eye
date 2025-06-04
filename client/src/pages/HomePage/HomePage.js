@@ -3,7 +3,7 @@ import Webcam from 'react-webcam';
 import axios from 'axios';
 import './HomePage.css';
 import { useNavigate } from 'react-router-dom';
-import camera from '../../images/camera.png'; // Replace with your own
+import camera from '../../images/camera.png';
 
 const HomePage = () => {
   const webcamRef = useRef(null);
@@ -35,7 +35,7 @@ const HomePage = () => {
 
         try {
           const response = await axios.post(
-            "http://localhost:8080/api/v1/capture/upload",
+            "https://eco-eye.onrender.com/api/v1/capture/upload",
             {
               image: imageSrc,
               location,
