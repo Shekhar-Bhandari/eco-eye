@@ -24,7 +24,7 @@ const AdminPage = () => {
     if (!window.confirm('Are you sure you want to delete this image?')) return;
 
     try {
-      await axios.delete(`/api/v1/capture/${id}`);
+      await axios.delete(`https://eco-eye.onrender.com/api/v1/capture/${id}`);
       setImages((prev) => prev.filter((img) => img._id !== id));
     } catch (error) {
       console.error('Failed to delete image:', error);
