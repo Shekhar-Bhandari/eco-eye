@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 import axios from 'axios';
 import './HomePage.css';
@@ -9,93 +9,12 @@ const HomePage = () => {
   const webcamRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
-  const [cameraPermission, setCameraPermission] = useState(null); // 'granted', 'denied', 'prompt', null
-  const [locationPermission, setLocationPermission] = useState(null);
-  const [showPermissionModal, setShowPermissionModal] = useState(false);
-  const [permissionError, setPermissionError] = useState('');
   const navigate = useNavigate();
 
   const videoConstraints = {
     width: 1280,
     height: 720,
     facingMode: 'user',
-  };
-
-  // Check permissions on component mount
-  useEffect(() => {
-    checkPermissions();
-  }, []);
-
-  const checkPermissions = async () => {
-    // Check camera permission
-    try {
-      const cameraStatus = await navigator.permissions.query({ name: 'camera' });
-      setCameraPermission(cameraStatus.state);
-      
-      // Listen for permission changes
-      cameraStatus.onchange = () => {
-        setCameraPermission(cameraStatus.state);
-      };
-    } catch (error) {
-      console.log('Camera permission check not supported');
-    }
-
-    // Check location permission
-    try {
-      const locationStatus = await navigator.permissions.query({ name: 'geolocation' });
-      setLocationPermission(locationStatus.state);
-      
-      // Listen for permission changes
-      locationStatus.onchange = () => {
-        setLocationPermission(locationStatus.state);
-      };
-    } catch (error) {
-      console.log('Location permission check not supported');
-    }
-  };
-
-  const requestPermissions = async () => {
-    setPermissionError('');
-    setShowPermissionModal(true);
-
-    try {
-      // Request camera permission
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      stream.getTracks().forEach(track => track.stop()); // Stop the stream after getting permission
-      setCameraPermission('granted');
-      
-      // Request location permission
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocationPermission('granted');
-          setShowPermissionModal(false);
-          setShowCamera(true);
-        },
-        (error) => {
-          console.error('Location permission denied:', error);
-          setLocationPermission('denied');
-          setPermissionError('Location access is required to report waste issues. Please enable location in your browser settings.');
-        }
-      );
-    } catch (error) {
-      console.error('Camera permission denied:', error);
-      setCameraPermission('denied');
-      setPermissionError('Camera access is required to capture images. Please enable camera in your browser settings.');
-    }
-  };
-
-  const handleCameraClick = () => {
-    if (cameraPermission === 'denied' || locationPermission === 'denied') {
-      setShowPermissionModal(true);
-      setPermissionError('Please enable camera and location permissions to use this feature.');
-      return;
-    }
-
-    if (cameraPermission !== 'granted' || locationPermission !== 'granted') {
-      requestPermissions();
-    } else {
-      setShowCamera(true);
-    }
   };
 
   const captureImage = () => {
@@ -132,19 +51,10 @@ const HomePage = () => {
         }
       },
       (error) => {
-        alert("Failed to get location. Please ensure location services are enabled.");
+        alert("Failed to get location.");
         console.error(error);
       }
     );
-  };
-
-  const closePermissionModal = () => {
-    setShowPermissionModal(false);
-    setPermissionError('');
-  };
-
-  const openBrowserSettings = () => {
-    alert('To enable permissions:\n\n1. Click the camera/location icon in your browser\'s address bar\n2. Select "Allow" for both camera and location\n3. Refresh the page if needed\n\nFor Chrome: chrome://settings/content\nFor Firefox: about:preferences#privacy');
   };
 
   return (
@@ -152,81 +62,14 @@ const HomePage = () => {
       <header className="header">
         <h1>Eco Eye</h1>
         <p>Report Waste Instantly with Your Camera</p>
+        <p className='cam-access'>Please allow permissions for your camera and location access.</p>
       </header>
-
-      {/* Permission Modal */}
-      {showPermissionModal && (
-        <div className="permission-modal-overlay">
-          <div className="permission-modal">
-            <h3>Permissions Required</h3>
-            <div className="permission-content">
-              <div className="permission-item">
-                <span className="permission-icon">📷</span>
-                <div>
-                  <strong>Camera Access</strong>
-                  <p>Required to capture images of waste</p>
-                  <span className={`permission-status ${cameraPermission}`}>
-                    {cameraPermission === 'granted' ? '✅ Granted' : 
-                     cameraPermission === 'denied' ? '❌ Denied' : '⏳ Requesting...'}
-                  </span>
-                </div>
-              </div>
-              
-              <div className="permission-item">
-                <span className="permission-icon">📍</span>
-                <div>
-                  <strong>Location Access</strong>
-                  <p>Required to pinpoint waste location</p>
-                  <span className={`permission-status ${locationPermission}`}>
-                    {locationPermission === 'granted' ? '✅ Granted' : 
-                     locationPermission === 'denied' ? '❌ Denied' : '⏳ Requesting...'}
-                  </span>
-                </div>
-              </div>
-            </div>
-            
-            {permissionError && (
-              <div className="permission-error">
-                <p>{permissionError}</p>
-              </div>
-            )}
-            
-            <div className="permission-buttons">
-              {(cameraPermission === 'denied' || locationPermission === 'denied') && (
-                <button onClick={openBrowserSettings} className="settings-btn">
-                  Open Browser Settings
-                </button>
-              )}
-              <button onClick={requestPermissions} className="retry-btn">
-                Try Again
-              </button>
-              <button onClick={closePermissionModal} className="close-btn">
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <main className="home">
         {!showCamera ? (
-          <div className="camera-button" onClick={handleCameraClick}>
+          <div className="camera-button" onClick={() => setShowCamera(true)}>
             <img className="cam" src={camera} alt="Open Camera" />
-            <p className="instruction-text">
-              Click to open camera and report garbage issue
-            </p>
-            
-            {/* Permission Status Indicators */}
-            <div className="permission-indicators">
-              <div className={`permission-indicator ${cameraPermission}`}>
-                📷 Camera: {cameraPermission === 'granted' ? 'Ready' : 
-                          cameraPermission === 'denied' ? 'Blocked' : 'Not Set'}
-              </div>
-              <div className={`permission-indicator ${locationPermission}`}>
-                📍 Location: {locationPermission === 'granted' ? 'Ready' : 
-                             locationPermission === 'denied' ? 'Blocked' : 'Not Set'}
-              </div>
-            </div>
+            <p className="instruction-text">Click to open camera and report garbage issue</p>
           </div>
         ) : (
           <div className="webcam">
@@ -242,7 +85,6 @@ const HomePage = () => {
             <div className="btn">
               <button onClick={captureImage}>📸 Capture</button>
               <button onClick={sendImageToBackend}>📤 Send</button>
-              <button onClick={() => setShowCamera(false)}>❌ Close Camera</button>
             </div>
 
             {imageSrc && (
