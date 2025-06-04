@@ -1,156 +1,236 @@
-/* Base Page Layout */
-.page-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(to right, #e8f5e9, #f1f8e9);
-}
+/* Add these styles to your existing HomePage.css */
 
-/* Header */
-.header {
-  background-color: #2e7d32;
-  color: white;
-  padding: 1.5rem 2rem;
-  text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.header h1 {
-  margin: 0;
-  font-size: 2rem;
-}
-
-.header p {
-  margin-top: 0.5rem;
-  font-size: 1rem;
-  opacity: 0.9;
-}
-
-/* Main Content */
-.home {
-  flex: 1;
+/* Permission Modal Styles */
+.permission-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
+}
+
+.permission-modal {
+  background: white;
   padding: 2rem;
-  flex-direction: column;
-}
-
-/* Camera Button */
-.camera-button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-  text-align: center;
-  transition: transform 0.3s;
-}
-
-.camera-button:hover {
-  transform: scale(1.05);
-}
-
-.cam {
-  max-width: 90%;
-  height: auto;
-  border-radius: 16px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.instruction-text {
-  margin-top: 1rem;
-  font-size: 1.1rem;
-  color: #555;
-}
-
-/* Webcam UI */
-.webcam {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.5rem;
-  border-radius: 16px;
-  background-color: #ffffff;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  max-width: 90%;
-  width: 640px;
-}
-
-.btn {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-button {
-  background-color: #2e7d32;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 10px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #1b5e20;
-}
-
-/* Image Preview */
-.preview {
-  text-align: center;
-  margin-top: 1rem;
-}
-
-.preview img {
-  width: 100%;
-  max-width: 320px;
   border-radius: 12px;
-  margin-top: 0.5rem;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease-out;
 }
 
-/* Footer */
-.footer {
-  background-color: #2e7d32;
-  color: white;
-  padding: 1rem;
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.permission-modal h3 {
+  margin: 0 0 1.5rem 0;
+  color: #2d3748;
   text-align: center;
+  font-size: 1.5rem;
+}
+
+.permission-content {
+  margin-bottom: 1.5rem;
+}
+
+.permission-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f7fafc;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.permission-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.permission-item strong {
+  display: block;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+.permission-item p {
+  color: #718096;
+  margin: 0 0 0.5rem 0;
   font-size: 0.9rem;
+}
+
+.permission-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.permission-status.granted {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.permission-status.denied {
+  background: #fed7d7;
+  color: #742a2a;
+}
+
+.permission-status.prompt {
+  background: #feebc8;
+  color: #7b341e;
+}
+
+.permission-error {
+  background: #fed7d7;
+  border: 1px solid #feb2b2;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.permission-error p {
+  color: #742a2a;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.permission-buttons {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.permission-buttons button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.settings-btn {
+  background: #3182ce;
+  color: white;
+}
+
+.settings-btn:hover {
+  background: #2c5282;
+}
+
+.retry-btn {
+  background: #38a169;
+  color: white;
+}
+
+.retry-btn:hover {
+  background: #2f855a;
+}
+
+.close-btn {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+.close-btn:hover {
+  background: #cbd5e0;
+}
+
+/* Permission Indicators */
+.permission-indicators {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.permission-indicator {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.permission-indicator.granted {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.permission-indicator.denied {
+  background: #fed7d7;
+  color: #742a2a;
+}
+
+.permission-indicator:not(.granted):not(.denied) {
+  background: #e2e8f0;
+  color: #4a5568;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .webcam {
-    width: 100%;
-    padding: 1rem;
+  .permission-modal {
+    margin: 1rem;
+    padding: 1.5rem;
   }
-
-  .btn {
+  
+  .permission-buttons {
+    justify-content: center;
+  }
+  
+  .permission-buttons button {
+    flex: 1;
+    min-width: 100px;
+  }
+  
+  .permission-item {
     flex-direction: column;
-    width: 100%;
+    text-align: center;
   }
+  
+  .permission-indicators {
+    align-items: center;
+  }
+}
 
-  button {
-    width: 100%;
-  }
+/* Enhanced camera button with permission status */
+.camera-button {
+  position: relative;
+}
 
-  .preview img {
-    max-width: 90%;
-  }
+.camera-button:hover .permission-indicators {
+  opacity: 1;
+  transform: translateY(0);
+}
 
-  .header h1 {
-    font-size: 1.5rem;
-  }
+.permission-indicators {
+  opacity: 0.8;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
 
-  .header p {
-    font-size: 0.9rem;
-  }
+/* Additional button for closing camera */
+.btn button:last-child {
+  background: #e53e3e;
+  color: white;
+}
 
-  .footer {
-    font-size: 0.8rem;
-  }
+.btn button:last-child:hover {
+  background: #c53030;
 }
